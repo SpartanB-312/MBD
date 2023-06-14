@@ -1,4 +1,7 @@
 # 单摆（ODE与DAE）
+## 说明
+`PendulumODE.m`是单摆的ODE解法
+`PendulumBaumgrate3`是单摆的DAE解法
 ## 模型
 ![单摆模型](pics/Pendulum1.jpg)
 
