@@ -66,7 +66,7 @@ end
 ```
 结果为：  
 ![](pics/PendulumODEResult1.png)  
-以`fsolve`为基准，计算迭代形式的误差：
+以`Adams`为基准，计算`fsolve`的误差：
 ![](pics/PendulumODEError1.png)  
 可以看出，误差量级较小，但在周期性增大。
 
@@ -153,6 +153,6 @@ end
 结果为：  
 ![](pics/PendulumDAEResult1.png)  
 
-同样地，以ODE的`fsolve`为基准，计算误差：
+同样地，以`Adams`为基准，计算误差：
 ![](pics/PendulumDAEError1.png)
-显然，相同的迭代形式，约束违约稳定方法求解的DAE的误差要大得多。
+显然，改进欧拉误差远小于隐式欧拉。

@@ -22,7 +22,7 @@ for i = 2:n
     v(i) = v(i - 1) + h * a(i);
     u(i) = u(i - 1) + h * v(i);
 
-    for j = 1:10
+    for j = 1:15
         a(i) = -9.8 * sin(u(i));
         v(i) = v(i - 1) + h * a(i);
         u(i) = u(i - 1) + h * v(i);

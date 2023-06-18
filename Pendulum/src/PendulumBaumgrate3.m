@@ -72,6 +72,46 @@ for i = 1:(length(t) - 1)
 
 end
 
+%% 改进欧拉
+for i = 1:(length(t) - 1)
+    B(3, 1) = -9.8 * sin(q(3, i));
+    P(1) = -v(3, i) ^ 2 * cos(q(3, i));
+    P(2) = v(3, i) ^ 2 * sin(q(3, i)); %加速度约束
+    phi = [q(1, i) - sin(q(3, i));
+           q(2, i) + cos(q(3, i))];
+    phiq = [1 0 -cos(q(3, i));
+            0 1 -sin(q(3, i))];
+    phiT = phiq * v(:, i);
+    P1 = P - 2 * alpha * phiT - (beta ^ 2) * phi;
+    LEFT = [A phiq';
+            phiq zeros(2)];
+    RIGHT = [B; P1];
+    X = (LEFT ^ -1) * RIGHT;
+    a(1, i) = X(1); a(2, i) = X(2); a(3, i) = X(3);
+    v(:, i + 1) = v(:, i) + h * a(:, i);
+    q(:, i + 1) = q(:, i) + h * v(:, i);
+
+    for j = 1:10
+        B(3, 1) = -9.8 * sin(q(3, i + 1));
+        P(1, 1) = -v(3, i + 1) ^ 2 * cos(q(3, i + 1));
+        P(2, 1) = v(3, i + 1) ^ 2 * sin(q(3, i + 1)); %加速度约束
+        phi = [q(1, i + 1) - sin(q(3, i + 1));
+               q(2, i + 1) + cos(q(3, i))];
+        phiq = [1 0 -cos(q(3, i + 1));
+                0 1 -sin(q(3, i + 1))];
+        phiT = phiq * v(:, i + 1);
+        P1 = P - 2 * alpha * phiT - (beta ^ 2) * phi;
+        LEFT = [A phiq';
+                phiq zeros(2)];
+        RIGHT = [B; P1];
+        X = (LEFT ^ -1) * RIGHT;
+        a(1, i + 1) = X(1); a(2, i + 1) = X(2); a(3, i + 1) = X(3);
+        v(:, i + 1) = v(:, i) + h * (a(:, i + 1) + a(:, i)) / 2;
+        q(:, i + 1) = q(:, i) + h * (v(:, i + 1) + v(:, i)) / 2;
+    end
+
+end
+
 %% Figure
 subplot(2, 2, 1), plot(t, q(1, :), t, q(2, :)); title('位置');
 subplot(2, 2, 2), plot(t, v(3, :)); title('角速度');
