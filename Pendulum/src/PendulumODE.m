@@ -18,9 +18,9 @@ end
 
 %% 隐式欧拉
 for i = 2:n
-    a(i) = -9.8 * sin(u(i - 1));
-    v(i) = v(i - 1) + h * a(i);
-    u(i) = u(i - 1) + h * v(i);
+    a(i-1) = -9.8 * sin(u(i - 1));
+    v(i) = v(i - 1) + h * a(i-1);
+    u(i) = u(i - 1) + h * v(i-1);
 
     for j = 1:15
         a(i) = -9.8 * sin(u(i));
