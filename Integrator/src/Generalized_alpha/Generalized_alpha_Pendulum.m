@@ -43,5 +43,23 @@ for i = 2:(length(t) - 1)
     a(1, i) = X(1); a(2, i) = X(2); a(3, i) = X(3);
     v(:, i + 1) = v(:, i) + h*(1-gammai) * a(:, i)+h*gammai*a(:,i-1);
     q(:, i + 1) = q(:, i) + h * v(:, i)+(0.5-betai)*(h^2)*a(:,i-1)+betai*(h^2)*a(:,i-1);
+    at=a(:,i);
+    vt=v(:,i)+h*(1-gammai)*a(:,i)+h*gammai*at;
+    qt=q(:,i)+h*v(:,i)+(0.5-betai)*h^2*a(:,i-1)+betai*h^2*at;
+    x=0;
+    for j=1:10
 
+        P(1) = -vt(3) ^ 2 * cos(qt(3)); P(2) = vt(3) ^ 2 * sin(qt(3)); %加速度约束
+        phi = [qt(1) - sin(qt(3)); qt(2) + cos(qt(3))];
+        phiq = [1 0 -cos(qt(3)); 0 1 -sin(qt(3))];
+        phiT = phiq * vt;
+        P1 = P - 2 * alpha * phiT - (beta ^ 2) * phi;
+        LEFT = [A phiq'; phiq zeros(2)];
+        RIGHT = [B; P1];
+        X = (LEFT ^ -1) * RIGHT;
+        x=X(1:3)-at;
+        vt=vt+h*gammai*x;
+        qt=qt+betai*h^2*x;
+    end
+    a(:,i)=at+x;
 end
