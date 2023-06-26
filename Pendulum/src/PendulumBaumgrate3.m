@@ -1,13 +1,14 @@
 %% Baumgrate
 %
 %% 初值及测试
-A = [1 0 0; 0 1 0; 0 0 0];
-B = [0; -9.8; 0];%-9.8 * sin(pi / 6)];
+A = [1 0 0; 0 1 0; 0 0 1];
+B = [0; -9.8; -9.8 * sin(pi / 6)];
 q0 = [0.5; -sqrt(3) / 2; pi / 6]; v0 = [0; 0; 0]; %初始状态
 phi = [q0(1) - sin(pi / 6); q0(2) + cos(pi / 6)]; %约束
 phiq = [1 0 -cos(pi / 6); 0 1 -sin(pi / 6)]; %雅可比
 h = 0.001; T = 5; t = 0:h:T; %步长及时间
-
+global xi;
+xi=[q0;v0];
 column = zeros(3, (length(t) - 1));
 q = q0;
 v = v0;
@@ -42,34 +43,12 @@ end
 
 %% 隐式欧拉
 for i = 1:(length(t) - 1)
-    B(3, 1) = -9.8 * sin(q(3, i));
-    P(1) = -v(3, i) ^ 2 * cos(q(3, i)); P(2) = v(3, i) ^ 2 * sin(q(3, i)); %加速度约束
-    phi = [q(1, i) - sin(q(3, i)); q(2, i) + cos(q(3, i))];
-    phiq = [1 0 -cos(q(3, i)); 0 1 -sin(q(3, i))];
-    phiT = phiq * v(:, i);
-    P1 = P - 2 * alpha * phiT - (beta ^ 2) * phi;
-    LEFT = [A phiq'; phiq zeros(2)];
-    RIGHT = [B; P1];
-    X = (LEFT ^ -1) * RIGHT;
-    a(1, i) = X(1); a(2, i) = X(2); a(3, i) = X(3);
-    v(:, i + 1) = v(:, i) + h * a(:, i);
-    q(:, i + 1) = q(:, i) + h * v(:, i);
-
-    for j = 1:15
-        B(3, 1) = -9.8 * sin(q(3, i + 1));
-        P(1, 1) = -v(3, i + 1) ^ 2 * cos(q(3, i + 1)); P(2, 1) = v(3, i + 1) ^ 2 * sin(q(3, i + 1)); %加速度约束
-        phi = [q(1, i + 1) - sin(q(3, i + 1)); q(2, i + 1) + cos(q(3, i))];
-        phiq = [1 0 -cos(q(3, i + 1)); 0 1 -sin(q(3, i + 1))];
-        phiT = phiq * v(:, i + 1);
-        P1 = P - 2 * alpha * phiT - (beta ^ 2) * phi;
-        LEFT = [A phiq'; phiq zeros(2)];
-        RIGHT = [B; P1];
-        X = (LEFT ^ -1) * RIGHT;
-        a(1, i + 1) = X(1); a(2, i + 1) = X(2); a(3, i + 1) = X(3);
-        v(:, i + 1) = v(:, i) + h * a(:, i + 1);
-        q(:, i + 1) = q(:, i) + h * v(:, i + 1);
-    end
-
+    xi=[q(:,i);v(:,i)];
+    opts = optimoptions(@fsolve,'Algorithm', 'levenberg-marquardt','Display','off');
+    f=fsolve(@Fcn4ImplicitEuler,xi,opts);
+    %f=fsolve(@Fcn4ImplicitEuler,xi,optimset('Display','off'));
+    q(:,i+1)=f(1:3);
+    v(:,i+1)=f(4:6);
 end
 
 %% 改进欧拉
