@@ -148,7 +148,9 @@ for i=1:(length(t)-1)
 end
 
 %% Figure
-subplot(2,2,1),plot(t,q);title('位置');
-subplot(2,2,2),plot(t,v);title('速度');
-subplot(2,2,3),plot(t,a);title('加速度');
-subplot(2,2,4),plot(t,-atan(q(1,:)./q(2,:)));title('角度');
+subplot(2,2,1),plot(t,q);title('位置');legend('X1','Y1','X2','Y2');
+subplot(2,2,2),plot(t,v);title('速度');legend('VX1','VY1','VX2','VY2');
+%subplot(2,2,3),plot(t,a);title('加速度');legend('AX1','AY1','AX2','AY2');
+
+subplot(2,2,3),plot(t,-atan(q(1,:)./q(2,:))'*180/pi);title('角度1');
+subplot(2,2,4),plot(t,-atan(q(3,:)./q(4,:))'*180/pi);title('角度2');

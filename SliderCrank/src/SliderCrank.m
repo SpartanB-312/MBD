@@ -105,4 +105,21 @@ for i = 1:length(t) - 1
 end
 
 %% figure
-plot(t, q(1, :));
+figure(1);
+hold on;
+grid on;
+plot(t, q(7, :),'-g');
+plot(t, q(8, :),'-r');
+legend('滑块X方向','滑块Y方向');
+
+figure(2);
+hold on;
+grid on;
+plot(t, v(7, :),'-g');
+legend('滑块X方向速度');
+
+figure(3);
+hold on;
+grid on;
+plot(t, a(7, :),'-g');
+legend('滑块X方向加速度');

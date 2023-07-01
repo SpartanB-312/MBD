@@ -51,6 +51,7 @@ for i = 1:(length(t) - 1)
     %f=fsolve(@Fcn4ImplicitEuler,xi,optimset('Display','off'));
     q(:,i+1)=f(1:3);
     v(:,i+1)=f(4:6);
+    phi(:,i+1) = [q(1, i+1) - sin(q(3, i+1)); q(2, i+1) + cos(q(3, i+1))];
 end
 
 %% 改进欧拉

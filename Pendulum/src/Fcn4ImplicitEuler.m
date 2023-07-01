@@ -20,5 +20,5 @@ a=X(1:3);
 delta=[v;a];
 
 FcnOut=[xi+h*delta-[q;v];
-       alpha*phiq * v+beta*phi];
+       phiT];
 end
