@@ -10,27 +10,29 @@ using namespace std;
 
 int main()
 {
-  float g=-9.8;
-  float h = 0.001;
-  float t = 5;
+  double g=-9.8;
+  double h = 0.001;
+  double t = 5;
   int n=(int)t/h;
-  float pi=M_PI;
+  double pi=M_PI;
   MatrixXd q(1,n);
   MatrixXd v(1,n);
   MatrixXd a(1,n);
 
   q(0,0)=pi/3;
   v(0,0)=0;
-  a(0,0)=g*sin(q(1,1));
-
+  a(0,0)=g*sin(q(0,0));
   for(int i=1;i<n;i++)
   {
-    q(1,i)=q(1,i-1)+v(1,i-1)*h;
-    v(1,i)=v(1,i-1)+a(1,i-1)*h;
-    a(1,i)=g*sin(q(1,i));
+    q(0,i)=q(0,i-1)+v(0,i-1)*h;
+    v(0,i)=v(0,i-1)+a(0,i-1)*h;
+    a(0,i)=g*sin(q(0,i));
   }
-  //cout << q(1,1) << endl;
-  ofstream fout("test.txt");
-  fout << q;
-  fout.close();
+
+  ofstream fout("matrixTest.csv");
+  for(int i=1;i<n;i++)
+  {
+    fout << q(0,i) << endl;
+  }
+	fout.flush();
 }
