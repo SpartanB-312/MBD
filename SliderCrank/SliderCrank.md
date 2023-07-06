@@ -5,7 +5,7 @@
 - 曲柄转速$100\pi/3$每秒  
 - 曲柄长度$2l_1=1$，质量$m_1=1$  
 - 连杆长度$2l_1=2$，质量$m_2=1$  
-- 滑块质量$m_3=1$
+- 滑块质量$m_3=1$  
 ## DAE
 列出微分代数方程
 $M\ddot{q}+\Phi^T_q\lambda=B$  
@@ -17,14 +17,14 @@ $\Phi_K=\begin{bmatrix}
     y_2+l_2*sin(\theta_2)\\
     l_2*cos(\theta_2)-x_2+x_3\\
     y_3
-\end{bmatrix}$
+\end{bmatrix}$  
 $\Phi_D=\begin{bmatrix}
     \theta_1-\omega*t
-\end{bmatrix}$
+\end{bmatrix}$  
 $\Phi=\begin{bmatrix}
     \Phi_K\\
     \Phi_D
-\end{bmatrix}$
+\end{bmatrix}$  
 其中，$M$为质量矩阵，$\Phi_q$为$\Phi$的雅可比矩阵，$\lambda$为约束反力，$B$为外力  
 $M=\begin{bmatrix}
     m_1&&&&\\
@@ -35,12 +35,12 @@ $M=\begin{bmatrix}
     0&0&0&0&0&J_2\\
     0&0&0&0&0&0&m_3\\
     0&0&0&0&0&0&0&m_3
-\end{bmatrix}$
+\end{bmatrix}$  
 $B=\begin{bmatrix}
-    0&0&0&0&0&0&0&0
-\end{bmatrix}^T$
+    0&m_1g&0&0&m_2g&0&m_3g&0
+\end{bmatrix}^T$  
 
-matlab代码为：
+matlab代码为：  
 ```matlab
 %%
 %隐式欧拉
@@ -84,7 +84,7 @@ for i = 1:length(t) - 1
 end
 end
 ```
-结果为
+结果为  
 ![位置](pics/sliderqX.png)
 <center>滑块X方向位置</center>  
 
