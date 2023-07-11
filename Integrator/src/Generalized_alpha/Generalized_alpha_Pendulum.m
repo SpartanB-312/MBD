@@ -50,7 +50,7 @@ for i = 1:(length(t) - 1)
     detw=ones(1,5);
     j=1;
 
-    while max(abs(detw))>1e-3
+    while max(abs(detw))>1e-4
 %         q(:,i+1)=q(:,i)+h*v(:,i)+0.5*h^2*((1-2*beta)*a(:,i)+2*beta*a(:,i));
 %         v(:,i+1)=v(:,i)+h*((1-gamma)*a(:,i)+gamma*a(:,i+1));
         q(:,i+1)=q(:,i)+h*v(:,i)+0.5*h^2*((1-2*beta)*a(:,i)+2*beta*a(:,i+1));
@@ -85,7 +85,7 @@ for i = 1:(length(t) - 1)
 
 
         j=j+1;
-        if j>1000
+        if j>10000
             break;
         end
     end
