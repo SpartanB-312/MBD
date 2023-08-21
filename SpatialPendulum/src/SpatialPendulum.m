@@ -30,38 +30,40 @@ a = zeros(6, length(t));
 E = eye(6);
 alpha = 25; beta = 50; %经验值5~50
 %alpha=1/h;beta=sqrt(2)/h;
-w=[v(4,1);v(5,1);v(6,1)];
-wMat=Vec2Mat(w);
-P = -R*wMat*wMat*[0;0;L/2];
+w_=[v(4,1);v(5,1);v(6,1)];
+wMat_=Vec2Mat(w_);
+P = -R*wMat_*wMat_*[0;0;L/2];
 PhiT = Phixyz * v(1:3,1)+Phipi*v(4:6,1); %对时间全微分
 P1 = P - 2 * alpha * PhiT - beta ^ 2 * Phi; %稳定形式
 LHS = [M, zeros(3), Phixyz';
        zeros(3), J, Phipi';
        Phixyz, Phipi, zeros(3)]; %左端系数
-RHS = [F; N-wMat*J*w; P1]; %右端
+RHS = [F; R*N-wMat_*J*w_; P1]; %右端
 X = (LHS ^ -1) * RHS; %上三行加速度；下两行lamda
 %% 组装
 q = [q column]; v = [v column];
 %%
 for i = 1:(length(t) - 1)
     R = CgaCal(q(4,i),q(5,i),q(6,i));
+    D = AngleRateDCal(q(4,i),q(5,i));
     Phi = q(1:3,i)+R*[0;0;L/2]; %约束
     Phipi=-R*Vec2Mat([0;0;L/2]);
     Phixyz = [1 0 0;
                     0 1 0;
                     0 0 1];
-    w=[v(4,i);v(5,i);v(6,i)];
-    wMat=Vec2Mat(w);
-    P = -R*wMat*wMat*[0;0;L/2];
+    w_=[v(4,i);v(5,i);v(6,i)];
+    wMat_=Vec2Mat(w_);
+    P = -R*wMat_*wMat_*[0;0;L/2];
     PhiT = Phixyz * v(1:3,1)+Phipi*v(4:6,1); %对时间全微分
     P1 = P - 2 * alpha * PhiT - beta ^ 2 * Phi; %稳定形式
     LHS = [M, zeros(3), Phixyz';
                 zeros(3), J, Phipi';
                 Phixyz, Phipi, zeros(3)]; %左端系数
-    RHS = [F; N-wMat*J*w; P1]; %右端
+    RHS = [F; N-wMat_*J*w_; P1]; %右端
     X = (LHS ^ -1) * RHS; 
-    a(:, i) = X(1:6); 
-    v(:, i + 1) = v(:, i) + h * a(:, i);
+    a(:, i) = X(1:6);
+    v(1:3, i + 1) = v(1:3, i) + h * a(1:3, i);
+    v(4:6, i + 1) = v(4:6, i) + h * D * a(4:6, i);
     q(:, i + 1) = q(:, i) + h * v(:, i);
 end
 
