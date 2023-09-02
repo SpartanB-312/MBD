@@ -1,4 +1,4 @@
-%% Spatial Pendulum
+%% Spatial Double Pendulum
 %
 %% 初值及测试
 % A = [1 0 0; 0 1 0; 0 0 1];
@@ -94,20 +94,10 @@ for i = 1:(length(t) - 1)
     X = LHS \ RHS;
     a1(:, i) = [X(1:3); X(7:9)];
     a2(:, i) = [X(4:6); X(10:12)];
-    v1(1:3, i + 1) = v1(1:3, i) + h * a1(1:3, i); v1(4:6, i + 1) = v1(4:6, i) + h * D1 * a1(4:6, i);
-    v2(1:3, i + 1) = v2(1:3, i) + h * a2(1:3, i); v2(4:6, i + 1) = v2(4:6, i) + h * D2 * a2(4:6, i);
-    q1(:, i + 1) = q1(:, i) + h * v1(:, i); q2(:, i + 1) = q2(:, i) + h * v2(:, i);
-end
-
-%% 隐式欧拉
-for i = 1:(length(t) - 1)
-    xi = [q(:, i); v(:, i)];
-    opts = optimoptions(@fsolve, 'Algorithm', 'levenberg-marquardt', 'Display', 'off');
-    f = fsolve(@Fcn4ImplicitEuler, xi, opts);
-    %f=fsolve(@Fcn4ImplicitEuler,xi,optimset('Display','off'));
-    q(:, i + 1) = f(1:3);
-    v(:, i + 1) = f(4:6);
-    phi(:, i + 1) = [q(1, i + 1) - sin(q(3, i + 1)); q(2, i + 1) + cos(q(3, i + 1))];
+    v1(:, i + 1) = v1(:, i) + h * a1(:, i);
+    v2(:, i + 1) = v2(:, i) + h * a2(:, i);
+    q1(:, i + 1) = q1(:, i) + h * [eye(3),zeros(3);zeros(3),D1] * v1(:, i);
+    q2(:, i + 1) = q2(:, i) + h * [eye(3),zeros(3);zeros(3),D2] * v2(:, i);
 end
 
 %% Figure
