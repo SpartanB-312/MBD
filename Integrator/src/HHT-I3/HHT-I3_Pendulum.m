@@ -27,7 +27,8 @@ q(:, 2) = q(:, 1) + h * v(:, 1);
 %% 组装
 q = [q column]; v = [v column]; l=[l column(1:2,:) zeros(2,1)];
 %% 广义alpha
-alpha=-1/3;%α在[0,1/3]
+alpha=-1/3;%α在[-1/3,0]
+alpha=0;
 gamma=0.5-alpha;beta=0.25*(0.5+gamma)^2;
 p=0.5;
 alpham=(2*p-1)/(1+p);alphaf=p/(1+p);
