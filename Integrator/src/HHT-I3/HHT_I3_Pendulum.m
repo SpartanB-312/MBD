@@ -27,8 +27,7 @@ q(:, 2) = q(:, 1) + h * v(:, 1);
 %% 组装
 q = [q column]; v = [v column]; l=[l column(1:2,:) zeros(2,1)];
 %% 广义alpha
-alpha=-1/3;%α在[-1/3,0]
-alpha=0;
+alpha=-1/6;%α在[-1/3,0]
 gamma=0.5-alpha;beta=0.25*(0.5+gamma)^2;
 p=0.5;
 alpham=(2*p-1)/(1+p);alphaf=p/(1+p);
@@ -57,20 +56,17 @@ for i = 1:(length(t) - 1)
         q(:,i+1)=q(:,i)+h*v(:,i)+0.5*h^2*((1-2*beta)*a(:,i)+2*beta*a(:,i+1));
         v(:,i+1)=v(:,i)+h*((1-gamma)*a(:,i)+gamma*a(:,i+1));
         
-        Kt=diag([0,0,l(1,i+1)*sin(q(3,i+1))+l(2,i+1)*sin(q(3, i+1))]);
+        Kt=zeros(3);
         Ct=0;
         Pt=beta*h^2*Kt;
         
-        P(1) = -v(3, i+1) ^ 2 * cos(q(3, i+1)); P(2) = v(3, i+1) ^ 2 * sin(q(3, i+1)); %加速度约束
         phi = [q(1, i+1) - sin(q(3, i+1)); q(2, i+1) + cos(q(3, i+1))];
         phiq = [1 0 -cos(q(3, i+1)); 0 1 -sin(q(3, i+1))];
         phiT = phiq * v(:, i+1);
         P1 = P - 2 * Alpha * phiT - (Beta ^ 2) * phi;
-        %St = [A*betai+Ct*gammai+Kt phiq'; phiq zeros(2)];
-        St = [A+Pt phiq'; phiq zeros(2)];
+        St = [A/(1+alpha)+Pt phiq'; phiq zeros(2)];
         rl=phi/beta/h^2;
         rq=A*a(:,i+1)/(1+alpha)+phiq'*l(:,i+1)-B-alpha/(1+alpha)*(phiq'*l(:,i)-B);%最后一个B是上一个的B，但此处B不变
-        %rq=B-A*q(:,i+1)-phiq'*l(:,i+1);
         RIGHT = [rq; rl];
         detw = St\RIGHT;
         detq=detw(1:3);
@@ -94,3 +90,5 @@ for i = 1:(length(t) - 1)
     at=at+(1-alphaf)/(1-alpham)*a(:,i+1);
 
 end
+%% figure
+plot(t,q(3, :)*180/pi);
