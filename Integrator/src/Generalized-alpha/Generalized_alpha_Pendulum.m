@@ -14,11 +14,10 @@ E = eye(3);
 Alpha = 25; Beta = 50; %经验值5~50
 %alpha=1/h;beta=sqrt(2)/h;
 P = zeros(2, 1);
-P(1) = -v(3) ^ 2 * cos(q(3)); P(2) = v(3) ^ 2 * sin(q(3)); %加速度约束
+P(1) = -dq(3) ^ 2 * cos(q(3)); P(2) = dq(3) ^ 2 * sin(q(3)); %加速度约束
 phiT = phiq * dq; %对时间全微分
-P1 = P - 2 * Alpha * phiT - Beta ^ 2 * phi; %稳定形式
 LEFT = [A phiq'; phiq zeros(2)]; %左端系数
-RIGHT = [B; P1]; %右端
+RIGHT = [B; P]; %右端
 X = (LEFT ^ -1) * RIGHT; %上三行加速度；下两行lamda
 ddq(1, 1) = X(1); ddq(2, 1) = X(2); ddq(3, 1) = X(3);
 l=X(4:5);
@@ -56,7 +55,6 @@ for i = 1:(length(t) - 1)
         phi = [q(1, i+1) - sin(q(3, i+1)); q(2, i+1) + cos(q(3, i+1))];
         phiq = [1 0 -cos(q(3, i+1)); 0 1 -sin(q(3, i+1))];
         phiqlq = [0,0,0;0,0,0;0,0,sin(q(3,i+1))-cos(q(3,i+1))];
-        phiT = phiq * v(:, i+1);
         P1 = P - 2 * Alpha * phiT - (Beta ^ 2) * phi;
         Ct=zeros(3,3);
         Kt=phiqlq;
