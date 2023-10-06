@@ -13,6 +13,7 @@ ddq = zeros(3, length(t));
 E = eye(3);
 P = zeros(2, 1);
 P(1) = -dq(3) ^ 2 * cos(q(3)); P(2) = dq(3) ^ 2 * sin(q(3)); %加速度约束
+P(1) = -dq(3) ^ 2 * sin(q(3)); P(2) = dq(3) ^ 2 * cos(q(3)); %加速度约束
 phiT = phiq * dq; %对时间全微分
 LEFT = [A phiq'; phiq zeros(2)]; %左端系数
 RIGHT = [B; P]; %右端

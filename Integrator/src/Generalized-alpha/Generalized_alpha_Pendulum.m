@@ -15,6 +15,7 @@ Alpha = 25; Beta = 50; %经验值5~50
 %alpha=1/h;beta=sqrt(2)/h;
 P = zeros(2, 1);
 P(1) = -dq(3) ^ 2 * cos(q(3)); P(2) = dq(3) ^ 2 * sin(q(3)); %加速度约束
+P(1) = -dq(3) ^ 2 * sin(q(3)); P(2) = dq(3) ^ 2 * cos(q(3)); %加速度约束
 phiT = phiq * dq; %对时间全微分
 LEFT = [A phiq'; phiq zeros(2)]; %左端系数
 RIGHT = [B; P]; %右端
@@ -55,7 +56,6 @@ for i = 1:(length(t) - 1)
         phi = [q(1, i+1) - sin(q(3, i+1)); q(2, i+1) + cos(q(3, i+1))];
         phiq = [1 0 -cos(q(3, i+1)); 0 1 -sin(q(3, i+1))];
         phiqlq = [0,0,0;0,0,0;0,0,sin(q(3,i+1))-cos(q(3,i+1))];
-        P1 = P - 2 * Alpha * phiT - (Beta ^ 2) * phi;
         Ct=zeros(3,3);
         Kt=phiqlq;
         St = [A*betab+Ct*betab+Kt phiq'; phiq zeros(2)];

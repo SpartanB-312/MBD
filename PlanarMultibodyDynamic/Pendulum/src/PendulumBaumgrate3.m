@@ -20,6 +20,7 @@ alpha = 25; beta = 50; %经验值5~50
 %alpha=1/h;beta=sqrt(2)/h;
 P = zeros(2, 1);
 P(1) = -v(3) ^ 2 * cos(q(3)); P(2) = v(3) ^ 2 * sin(q(3)); %加速度约束
+P(1) = -v(3) ^ 2 * sin(q(3)); P(2) = v(3) ^ 2 * cos(q(3)); %加速度约束
 phiT = phiq * v; %对时间全微分
 P1 = P - 2 * alpha * phiT - beta ^ 2 * phi; %稳定形式
 LEFT = [A phiq'; phiq zeros(2)]; %左端系数
@@ -31,6 +32,7 @@ q = [q column]; v = [v column];
 for i = 1:(length(t) - 1)
     %B(3, 1) = -9.8 * sin(q(3, i));
     P(1) = -v(3, i) ^ 2 * cos(q(3, i)); P(2) = v(3, i) ^ 2 * sin(q(3, i)); %加速度约束
+    P(1) = -v(3,i) ^ 2 * sin(q(3,i)); P(2) = v(3,i) ^ 2 * cos(q(3,i)); %加速度约束
     phi = [q(1, i) - sin(q(3, i)); q(2, i) + cos(q(3, i))];
     phiq = [1 0 -cos(q(3, i)); 0 1 -sin(q(3, i))];
     phiT = phiq * v(:, i);

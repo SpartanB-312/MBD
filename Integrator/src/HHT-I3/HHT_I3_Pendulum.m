@@ -15,6 +15,7 @@ Alpha = 25; Beta = 50; %经验值5~50
 %alpha=1/h;beta=sqrt(2)/h;
 P = zeros(2, 1);
 P(1) = -v(3) ^ 2 * cos(q(3)); P(2) = v(3) ^ 2 * sin(q(3)); %加速度约束
+P(1) = -v(3) ^ 2 * sin(q(3)); P(2) = v(3) ^ 2 * cos(q(3)); %加速度约束
 phiT = phiq * v; %对时间全微分
 P1 = P - 2 * Alpha * phiT - Beta ^ 2 * phi; %稳定形式
 LEFT = [A phiq'; phiq zeros(2)]; %左端系数
