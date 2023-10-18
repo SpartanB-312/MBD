@@ -13,6 +13,7 @@ ddq = zeros(3, length(t));
 E = eye(3);
 P = zeros(2, 1);
 P(1) = -dq(3) ^ 2 * cos(q(3)); P(2) = dq(3) ^ 2 * sin(q(3)); %加速度约束
+P(1) = -dq(3) ^ 2 * sin(q(3)); P(2) = dq(3) ^ 2 * cos(q(3)); %加速度约束
 PhiT = Phiq * dq; %对时间全微分
 LEFT = [M Phiq'; Phiq zeros(2)]; %左端系数
 RIGHT = [Q; P]; %右端
@@ -45,6 +46,7 @@ for i = 1:(length(t) - 1)
     Phiq = [1 0 -cos(q(3,i+1)); 0 1 -sin(q(3,i+1))];
     dPhi=Phiq*dq(:,i+1)+zeros(2,1);
     P(1) = -dq(3,i+1) ^ 2 * cos(q(3,i+1)); P(2) = dq(3,i+1) ^ 2 * sin(q(3,i+1));
+    P(1) = -dq(3,i+1) ^ 2 * sin(q(3,i+1)); P(2) = dq(3,i+1) ^ 2 * cos(q(3,i+1));
     ddPhi=Phiq*ddq(:,i+1)-P;
 %     Phiqqp(:,:,1)=zeros(2,3)';
 %     Phiqqp(:,:,2)=zeros(2,3)';
@@ -75,8 +77,8 @@ for i = 1:(length(t) - 1)
 %         Phiqq(:,:,3)=[0 0 sin(q(3,i+1));0 0 -cos(q(3,i+1))];
         dPhi=Phiq*dq(:,i+1)+zeros(2,1);
         P(1) = -dq(3,i+1) ^ 2 * cos(q(3,i+1)); P(2) = dq(3,i+1) ^ 2 * sin(q(3,i+1));
+        P(1) = -dq(3,i+1) ^ 2 * sin(q(3,i+1)); P(2) = dq(3,i+1) ^ 2 * cos(q(3,i+1));
         ddPhi=Phiq*ddq(:,i+1)-P;
-        %J=4/h^2*M-Qq+Phiqq'*alpha*Phi+Phiq'*beta*Phiq;
 
         Y=M*ddq(:,i+1)+Phiq'*alpha*(ddPhi+2*Omega*u*dPhi+Omega^2*Phi)-Q;
         Yk=Y;
@@ -86,16 +88,17 @@ for i = 1:(length(t) - 1)
         ddq(:,i+1)=4/h^2*q(:,i+1)-ddqb;
 
         dPhi=Phiq*dq(:,i+1)+zeros(2,1);
-        P(1) = -dq(3,i+1) ^ 2 * cos(q(3,i+1)); P(2) = dq(3,i+1) ^ 2 * sin(q(3,i+1));
-        ddPhi=Phiq*ddq(:,i+1)-P;
+%         P(1) = -dq(3,i+1) ^ 2 * cos(q(3,i+1)); P(2) = dq(3,i+1) ^ 2 * sin(q(3,i+1));
+%         ddPhi=Phiq*ddq(:,i+1)-P;
         
 %         sigma=sigma+beta*dPhi;
 %         k=k+beta*ddPhi;
-
-        dq(:,i+1)=(M+Phiq'*beta*Phiq)\(M*dq(:,i+1)-Phiq'*sigma);
-        P(1) = -dq(3,i+1) ^ 2 * cos(q(3,i+1)); P(2) = dq(3,i+1) ^ 2 * sin(q(3,i+1));
-        ddPhi=Phiq*ddq(:,i+1)-P;
-        ddq(:,i+1)=(M+Phiq'*beta*Phiq)\(M*ddq(:,i+1)-Phiq'*(-beta*P+k));
+% 
+%         dq(:,i+1)=(M+Phiq'*beta*Phiq)\(M*dq(:,i+1)-Phiq'*sigma);
+%         P(1) = -dq(3,i+1) ^ 2 * cos(q(3,i+1)); P(2) = dq(3,i+1) ^ 2 * sin(q(3,i+1));
+%         P(1) = -dq(3,i+1) ^ 2 * sin(q(3,i+1)); P(2) = dq(3,i+1) ^ 2 * cos(q(3,i+1));
+%         ddPhi=Phiq*ddq(:,i+1)-P;
+%         ddq(:,i+1)=(M+Phiq'*beta*Phiq)\(M*ddq(:,i+1)-Phiq'*(-beta*P+k));
         
         sigma=sigma+beta*dPhi;
         k=k+beta*ddPhi;
