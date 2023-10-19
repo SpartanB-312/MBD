@@ -67,9 +67,10 @@ for i=1:nstep-1
     drj(:,1)=[0;0];
     drj(:,2)=dq(1:2,1,i)+(I2tilde.*dq(3,1,i))*A(:,:,1)*ai(:,1);
     dV1_0=[I2tilde*(dq(1:2,1,i)-drj(:,1));0];
+    dV2_0=[I2tilde*(dq(1:2,2,i)-drj(:,1));0];
     dV2_1=[I2tilde*(dq(1:2,2,i)-drj(:,2));0];
     
-    dV=[dV1_0 zeros(3,1);zeros(3,1) dV2_1];
+    dV=[dV1_0 zeros(3,1);dV2_0 dV2_1];
     Mbar=V'*[M(:,:,1),zeros(3);zeros(3),M(:,:,2)]*V;
     Qebar=V'*Qe;
     Qvbar=-V'*[M(:,:,1),zeros(3);zeros(3),M(:,:,2)]*dV*dz(:,i);
@@ -87,8 +88,8 @@ theta14fig=reshape(q(3,1,:),1,nstep);
 theta24fig=reshape(q(3,2,:),1,nstep);
 hold on
 grid on
-plot(theta14fig,'-g');
-plot(theta24fig,'-r');
+plot(90+theta14fig*180/pi,'-g');
+plot(90+theta24fig*180/pi,'-r');
 legend('theta1','theta2')
 hold off
 figure(2)
