@@ -82,8 +82,15 @@ for i=1:nstep-1
     q(:,2,i+1)=q(:,1,i+1)+[CgaCal(q(3,1,i+1))*ai(:,1)+CgaCal(q(3,1,i+1)+z(2,i+1))*bi(:,2);z(2,i+1)];
 end
 %% figure
+figure(1)
 theta14fig=reshape(q(3,1,:),1,nstep);
 theta24fig=reshape(q(3,2,:),1,nstep);
 hold on
+grid on
 plot(theta14fig,'-g');
 plot(theta24fig,'-r');
+legend('theta1','theta2')
+hold off
+figure(2)
+load('DoublePendulum.mat');
+plot((pi/2+theta14fig)*180/pi-MEA_ANGLE_1Q);
