@@ -1,7 +1,7 @@
 function Qg = QgCal(rho,g,h,l,w)
     syms x y;
     I2=[1,0;0,1];
-    S1=1-3*(x/l)^2+2*(x/l)^3;
+    S1=1-3*(x/l)+2*(x/l)^2;
     S2=y*(1-3*(x/l)+2*(x/l)^2);
     S3=4*(x/l-(x/l)^2);
     S4=y*(4*(x/l)-4*(x/l)^2);
