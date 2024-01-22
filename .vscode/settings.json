@@ -1,0 +1,26 @@
+{
+    "cmake.configureOnOpen": false,
+    "files.associations": {
+        "*.py": "python",
+        "*.c": "c",
+        "random": "cpp",
+        "cmath": "cpp",
+        "complex": "cpp",
+        "ostream": "cpp",
+        "iostream": "cpp",
+        "dense": "cpp",
+        "chrono": "cpp",
+        "algorithm": "cpp",
+        "hash_map": "cpp",
+        "array": "cpp",
+        "deque": "cpp",
+        "list": "cpp",
+        "string": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "vector": "cpp",
+        "string_view": "cpp",
+        "initializer_list": "cpp",
+        "valarray": "cpp"
+    }
+}
